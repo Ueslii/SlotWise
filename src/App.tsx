@@ -19,7 +19,7 @@ import BookingSuccess from "./pages/BookingSuccess";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { useAuth } from "@/hooks/useAuth";
-
+import Explorar from "./pages/Explorar";
 const queryClient = new QueryClient();
 
 const LoadingScreen = () => (
@@ -74,7 +74,10 @@ const AppRoutes = () => {
       return (
         <Routes>
           <Route path="/pending-approval" element={<PendingApproval />} />
-          <Route path="*" element={<Navigate to="/pending-approval" replace />} />
+          <Route
+            path="*"
+            element={<Navigate to="/pending-approval" replace />}
+          />
         </Routes>
       );
     }
@@ -102,8 +105,9 @@ const AppRoutes = () => {
         <Route path="/estabelecimentos/:id" element={<EstablishmentPublic />} />
         <Route path="/agendar/:serviceId" element={<BookingPage />} />
         <Route path="/agendamento-concluido" element={<BookingSuccess />} />
-        <Route path="/" element={<Navigate to="/meus-agendamentos" replace />} />
-        <Route path="*" element={<Navigate to="/meus-agendamentos" replace />} />
+        <Route path="/" element={<Explorar />} />
+        <Route path="*" element={<Navigate to="/" replace />} />{" "}
+        {/* <-- Redireciona para Explorar */}
       </Routes>
     );
   }

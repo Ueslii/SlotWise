@@ -1,12 +1,17 @@
-import { Link } from 'react-router-dom';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { useAuth } from '@/hooks/useAuth';
-import { Calendar, Users, LogIn, UserPlus } from 'lucide-react';
+import { Link } from "react-router-dom";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
+import { Calendar, Users, LogIn, UserPlus } from "lucide-react";
 
 const Index = () => {
   const { user } = useAuth();
-
 
   return (
     <div className="min-h-screen bg-background">
@@ -17,7 +22,14 @@ const Index = () => {
           <p className="text-xl text-muted-foreground mb-8">
             Plataforma inteligente de agendamentos
           </p>
-          
+          <div className="text-center mt-8">
+            <h2 className="text-xl font-bold mb-4">Teste de Acesso</h2>
+            <Link to="/estabelecimentos/1">
+              {" "}
+              {/* <-- SUBSTITUA O "1" PELO ID REAL */}
+              <Button variant="secondary">Ver Estabelecimento de Teste</Button>
+            </Link>
+          </div>
           {!user && (
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/login">
@@ -27,7 +39,10 @@ const Index = () => {
                 </Button>
               </Link>
               <Link to="/register">
-                <Button variant="outline" className="flex items-center space-x-2 min-w-[140px]">
+                <Button
+                  variant="outline"
+                  className="flex items-center space-x-2 min-w-[140px]"
+                >
                   <UserPlus className="h-4 w-4" />
                   <span>Cadastrar</span>
                 </Button>
@@ -50,7 +65,8 @@ const Index = () => {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                Gerencie agendamentos de forma eficiente com nossa plataforma intuitiva.
+                Gerencie agendamentos de forma eficiente com nossa plataforma
+                intuitiva.
               </p>
             </CardContent>
           </Card>
@@ -67,7 +83,8 @@ const Index = () => {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                Mantenha o histórico e informações dos seus clientes organizados.
+                Mantenha o histórico e informações dos seus clientes
+                organizados.
               </p>
             </CardContent>
           </Card>
@@ -78,9 +95,7 @@ const Index = () => {
                 <Calendar className="h-5 w-5 text-primary" />
                 <span>Relatórios</span>
               </CardTitle>
-              <CardDescription>
-                Análises e métricas detalhadas
-              </CardDescription>
+              <CardDescription>Análises e métricas detalhadas</CardDescription>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
