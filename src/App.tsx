@@ -20,6 +20,7 @@ import NotFound from "./pages/NotFound";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { useAuth } from "@/hooks/useAuth";
 import Explorar from "./pages/Explorar";
+import MainLayout from "./pages/MainLayout";
 const queryClient = new QueryClient();
 
 const LoadingScreen = () => (
@@ -53,18 +54,23 @@ const AppRoutes = () => {
   if (profile?.role === "super_admin") {
     return (
       <Routes>
-        <Route path="/super-admin" element={<SuperAdmin />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/setup-establishment" element={<SetupEstablishment />} />
-        <Route path="/gerenciar-servicos" element={<GerenciarServicos />} />
-        <Route path="/disponibilidade" element={<Disponibilidade />} />
-        <Route path="/meus-agendamentos" element={<MeusAgendamentos />} />
-        <Route path="/pending-approval" element={<PendingApproval />} />
-        <Route path="/estabelecimentos/:id" element={<EstablishmentPublic />} />
-        <Route path="/agendar/:serviceId" element={<BookingPage />} />
-        <Route path="/agendamento-concluido" element={<BookingSuccess />} />
-        <Route path="/" element={<Navigate to="/super-admin" replace />} />
-        <Route path="*" element={<NotFound />} />
+        <Route element={<MainLayout />}>
+          <Route path="/super-admin" element={<SuperAdmin />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/setup-establishment" element={<SetupEstablishment />} />
+          <Route path="/gerenciar-servicos" element={<GerenciarServicos />} />
+          <Route path="/disponibilidade" element={<Disponibilidade />} />
+          <Route path="/meus-agendamentos" element={<MeusAgendamentos />} />
+          <Route path="/pending-approval" element={<PendingApproval />} />
+          <Route
+            path="/estabelecimentos/:id"
+            element={<EstablishmentPublic />}
+          />
+          <Route path="/agendar/:serviceId" element={<BookingPage />} />
+          <Route path="/agendamento-concluido" element={<BookingSuccess />} />
+          <Route path="/" element={<Navigate to="/super-admin" replace />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
       </Routes>
     );
   }
@@ -84,15 +90,20 @@ const AppRoutes = () => {
     // Admin ativo
     return (
       <Routes>
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/setup-establishment" element={<SetupEstablishment />} />
-        <Route path="/gerenciar-servicos" element={<GerenciarServicos />} />
-        <Route path="/disponibilidade" element={<Disponibilidade />} />
-        <Route path="/estabelecimentos/:id" element={<EstablishmentPublic />} />
-        <Route path="/agendar/:serviceId" element={<BookingPage />} />
-        <Route path="/agendamento-concluido" element={<BookingSuccess />} />
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
-        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        <Route element={<MainLayout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/setup-establishment" element={<SetupEstablishment />} />
+          <Route path="/gerenciar-servicos" element={<GerenciarServicos />} />
+          <Route path="/disponibilidade" element={<Disponibilidade />} />
+          <Route
+            path="/estabelecimentos/:id"
+            element={<EstablishmentPublic />}
+          />
+          <Route path="/agendar/:serviceId" element={<BookingPage />} />
+          <Route path="/agendamento-concluido" element={<BookingSuccess />} />
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        </Route>
       </Routes>
     );
   }
@@ -101,13 +112,19 @@ const AppRoutes = () => {
   if (profile?.role === "cliente") {
     return (
       <Routes>
-        <Route path="/meus-agendamentos" element={<MeusAgendamentos />} />
-        <Route path="/estabelecimentos/:id" element={<EstablishmentPublic />} />
-        <Route path="/agendar/:serviceId" element={<BookingPage />} />
-        <Route path="/agendamento-concluido" element={<BookingSuccess />} />
-        <Route path="/" element={<Explorar />} />
-        <Route path="*" element={<Navigate to="/" replace />} />{" "}
-        {/* <-- Redireciona para Explorar */}
+        <Route element={<MainLayout />}>
+          <Route path="/explorar" element={<Explorar />} />
+          <Route path="/meus-agendamentos" element={<MeusAgendamentos />} />
+          <Route
+            path="/estabelecimentos/:id"
+            element={<EstablishmentPublic />}
+          />
+          <Route path="/agendar/:serviceId" element={<BookingPage />} />
+          <Route path="/agendamento-concluido" element={<BookingSuccess />} />
+          <Route path="/" element={<Explorar />} />
+          <Route path="*" element={<Navigate to="/explorar" replace />} />{" "}
+          {/* <-- Redireciona para Explorar */}
+        </Route>
       </Routes>
     );
   }

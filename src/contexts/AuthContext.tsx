@@ -1,9 +1,10 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import { User, Session } from '@supabase/supabase-js';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { User, Session } from "@supabase/supabase-js";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 export interface UserProfile {
+  user: any;
   id: string;
   full_name: string | null;
   role: string;
@@ -15,8 +16,16 @@ interface AuthContextValue {
   session: Session | null;
   profile: UserProfile | null;
   loading: boolean;
-  signUp: (email: string, password: string, fullName: string, accountType: string) => Promise<{ error: { message: string } | null }>;
-  signIn: (email: string, password: string) => Promise<{ error: { message: string } | null }>;
+  signUp: (
+    email: string,
+    password: string,
+    fullName: string,
+    accountType: string
+  ) => Promise<{ error: { message: string } | null }>;
+  signIn: (
+    email: string,
+    password: string
+  ) => Promise<{ error: { message: string } | null }>;
   signOut: () => Promise<{ error: { message: string } | null }>;
 }
 
@@ -31,7 +40,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     // Listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
 
@@ -39,19 +50,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setTimeout(async () => {
           try {
             const { data: profileData, error } = await supabase
-              .from('profiles')
-              .select('*')
-              .eq('id', session.user!.id)
+              .from("profiles")
+              .select("*")
+              .eq("id", session.user!.id)
               .single();
 
             if (error) {
-              console.error('Error fetching profile:', error);
+              console.error("Error fetching profile:", error);
               setProfile(null);
             } else {
               setProfile(profileData as UserProfile);
             }
           } catch (err) {
-            console.error('Error in profile fetch:', err);
+            console.error("Error in profile fetch:", err);
             setProfile(null);
           } finally {
             setLoading(false);
@@ -73,7 +84,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return () => subscription.unsubscribe();
   }, []);
 
-  const signUp: AuthContextValue['signUp'] = async (email, password, fullName, accountType) => {
+  const signUp: AuthContextValue["signUp"] = async (
+    email,
+    password,
+    fullName,
+    accountType
+  ) => {
     try {
       const redirectUrl = `${window.location.origin}/`;
       const { error } = await supabase.auth.signUp({
@@ -88,56 +104,95 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         },
       });
       if (error) {
-        toast({ variant: 'destructive', title: 'Erro no cadastro', description: error.message });
+        toast({
+          variant: "destructive",
+          title: "Erro no cadastro",
+          description: error.message,
+        });
         return { error } as any;
       }
-      toast({ title: 'Cadastro realizado!', description: 'Verifique seu email para confirmar a conta.' });
+      toast({
+        title: "Cadastro realizado!",
+        description: "Verifique seu email para confirmar a conta.",
+      });
       return { error: null };
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Erro desconhecido';
-      toast({ variant: 'destructive', title: 'Erro no cadastro', description: message });
+      const message =
+        error instanceof Error ? error.message : "Erro desconhecido";
+      toast({
+        variant: "destructive",
+        title: "Erro no cadastro",
+        description: message,
+      });
       return { error: { message } };
     }
   };
 
-  const signIn: AuthContextValue['signIn'] = async (email, password) => {
+  const signIn: AuthContextValue["signIn"] = async (email, password) => {
     try {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
       if (error) {
-        toast({ variant: 'destructive', title: 'Erro no login', description: error.message });
+        toast({
+          variant: "destructive",
+          title: "Erro no login",
+          description: error.message,
+        });
         return { error } as any;
       }
       return { error: null };
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Erro desconhecido';
-      toast({ variant: 'destructive', title: 'Erro no login', description: message });
+      const message =
+        error instanceof Error ? error.message : "Erro desconhecido";
+      toast({
+        variant: "destructive",
+        title: "Erro no login",
+        description: message,
+      });
       return { error: { message } };
     }
   };
 
-  const signOut: AuthContextValue['signOut'] = async () => {
+  const signOut: AuthContextValue["signOut"] = async () => {
     try {
       const { error } = await supabase.auth.signOut();
       if (error) {
-        toast({ variant: 'destructive', title: 'Erro ao sair', description: error.message });
+        toast({
+          variant: "destructive",
+          title: "Erro ao sair",
+          description: error.message,
+        });
         return { error } as any;
       }
-      toast({ title: 'Logout realizado', description: 'Você foi desconectado com sucesso.' });
+      toast({
+        title: "Logout realizado",
+        description: "Você foi desconectado com sucesso.",
+      });
       return { error: null };
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Erro desconhecido';
-      toast({ variant: 'destructive', title: 'Erro ao sair', description: message });
+      const message =
+        error instanceof Error ? error.message : "Erro desconhecido";
+      toast({
+        variant: "destructive",
+        title: "Erro ao sair",
+        description: message,
+      });
       return { error: { message } };
     }
   };
 
-  const value = useMemo<AuthContextValue>(() => ({ user, session, profile, loading, signUp, signIn, signOut }), [user, session, profile, loading]);
+  const value = useMemo<AuthContextValue>(
+    () => ({ user, session, profile, loading, signUp, signIn, signOut }),
+    [user, session, profile, loading]
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export const useAuthContext = () => {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error('useAuthContext must be used within AuthProvider');
+  if (!ctx) throw new Error("useAuthContext must be used within AuthProvider");
   return ctx;
 };
