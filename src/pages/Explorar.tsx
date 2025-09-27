@@ -137,14 +137,6 @@ const Explorar = () => {
             <h1 className="text-3xl font-bold">Explorar</h1>
             <p className="text-muted-foreground">Explore toda a plataforma</p>
           </div>
-          <Button
-            variant="outline"
-            onClick={handleLogout}
-            className="flex items-center space-x-2"
-          >
-            <LogOut className="h-4 w-4" />
-            <span>Sair</span>
-          </Button>
         </div>
 
         {/* User Info */}

@@ -1,12 +1,25 @@
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { useAuth } from '@/hooks/useAuth';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
-import { Shield, User, LogOut, CheckCircle, Clock } from 'lucide-react';
+import { useState, useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { Shield, User, LogOut, CheckCircle, Clock } from "lucide-react";
 
 interface PendingUser {
   id: string;
@@ -25,28 +38,28 @@ const SuperAdmin = () => {
   const fetchPendingUsers = async () => {
     try {
       const { data, error } = await supabase
-        .from('profiles')
-        .select('id, full_name, role, status')
-        .eq('role', 'administrador')
-        .eq('status', 'pendente');
+        .from("profiles")
+        .select("id, full_name, role, status")
+        .eq("role", "administrador")
+        .eq("status", "pendente");
 
       if (error) {
-        console.error('Error fetching pending users:', error);
+        console.error("Error fetching pending users:", error);
         toast({
           variant: "destructive",
           title: "Erro",
-          description: "Erro ao carregar usuários pendentes"
+          description: "Erro ao carregar usuários pendentes",
         });
         return;
       }
 
       setPendingUsers(data || []);
     } catch (error) {
-      console.error('Error in fetchPendingUsers:', error);
+      console.error("Error in fetchPendingUsers:", error);
       toast({
         variant: "destructive",
         title: "Erro",
-        description: "Erro ao carregar dados"
+        description: "Erro ao carregar dados",
       });
     } finally {
       setLoading(false);
@@ -55,38 +68,38 @@ const SuperAdmin = () => {
 
   const approveUser = async (userId: string) => {
     setApproving(userId);
-    
+
     try {
       const { error } = await supabase
-        .from('profiles')
-        .update({ 
-          status: 'ativo' 
+        .from("profiles")
+        .update({
+          status: "ativo",
         })
-        .eq('id', userId);
+        .eq("id", userId);
 
       if (error) {
-        console.error('Error approving user:', error);
+        console.error("Error approving user:", error);
         toast({
           variant: "destructive",
           title: "Erro",
-          description: "Erro ao aprovar usuário"
+          description: "Erro ao aprovar usuário",
         });
         return;
       }
 
       toast({
         title: "Usuário aprovado",
-        description: "O usuário foi aprovado com sucesso"
+        description: "O usuário foi aprovado com sucesso",
       });
 
       // Refresh the list
       await fetchPendingUsers();
     } catch (error) {
-      console.error('Error in approveUser:', error);
+      console.error("Error in approveUser:", error);
       toast({
         variant: "destructive",
         title: "Erro",
-        description: "Erro ao aprovar usuário"
+        description: "Erro ao aprovar usuário",
       });
     } finally {
       setApproving(null);
@@ -111,12 +124,10 @@ const SuperAdmin = () => {
               <Shield className="h-8 w-8 text-primary" />
               <span>Painel Super Admin</span>
             </h1>
-            <p className="text-muted-foreground">Gerencie aprovações de prestadores</p>
+            <p className="text-muted-foreground">
+              Gerencie aprovações de prestadores
+            </p>
           </div>
-          <Button variant="outline" onClick={handleLogout} className="flex items-center space-x-2">
-            <LogOut className="h-4 w-4" />
-            <span>Sair</span>
-          </Button>
         </div>
 
         {/* User Info */}
@@ -129,9 +140,15 @@ const SuperAdmin = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              <p><strong>Nome:</strong> {profile?.full_name || 'Não informado'}</p>
-              <p><strong>Tipo:</strong> Super Admin</p>
-              <Badge variant="default" className="bg-primary">Acesso Total</Badge>
+              <p>
+                <strong>Nome:</strong> {profile?.full_name || "Não informado"}
+              </p>
+              <p>
+                <strong>Tipo:</strong> Super Admin
+              </p>
+              <Badge variant="default" className="bg-primary">
+                Acesso Total
+              </Badge>
             </div>
           </CardContent>
         </Card>
@@ -144,18 +161,23 @@ const SuperAdmin = () => {
               <span>Prestadores Pendentes de Aprovação</span>
             </CardTitle>
             <CardDescription>
-              Lista de prestadores aguardando aprovação para acessar a plataforma
+              Lista de prestadores aguardando aprovação para acessar a
+              plataforma
             </CardDescription>
           </CardHeader>
           <CardContent>
             {loading ? (
               <div className="text-center py-8">
-                <p className="text-muted-foreground">Carregando usuários pendentes...</p>
+                <p className="text-muted-foreground">
+                  Carregando usuários pendentes...
+                </p>
               </div>
             ) : pendingUsers.length === 0 ? (
               <div className="text-center py-8">
                 <CheckCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <p className="text-muted-foreground">Nenhum prestador pendente de aprovação</p>
+                <p className="text-muted-foreground">
+                  Nenhum prestador pendente de aprovação
+                </p>
               </div>
             ) : (
               <Table>
@@ -171,22 +193,22 @@ const SuperAdmin = () => {
                   {pendingUsers.map((user) => (
                     <TableRow key={user.id}>
                       <TableCell className="font-medium">
-                        {user.full_name || 'Nome não informado'}
+                        {user.full_name || "Nome não informado"}
                       </TableCell>
                       <TableCell>Prestador</TableCell>
                       <TableCell>
                         <Badge variant="secondary">Pendente</Badge>
                       </TableCell>
                       <TableCell>
-                        <Button 
-                          size="sm" 
+                        <Button
+                          size="sm"
                           onClick={() => approveUser(user.id)}
                           disabled={approving === user.id}
                           className="flex items-center space-x-1"
                         >
                           <CheckCircle className="h-4 w-4" />
                           <span>
-                            {approving === user.id ? 'Aprovando...' : 'Aprovar'}
+                            {approving === user.id ? "Aprovando..." : "Aprovar"}
                           </span>
                         </Button>
                       </TableCell>

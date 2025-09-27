@@ -1,13 +1,26 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { useAuth } from '@/hooks/useAuth';
-import { supabase } from '@/integrations/supabase/client';
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
-import { LayoutDashboard, User, LogOut, Building, Settings, Calendar } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import {
+  LayoutDashboard,
+  User,
+  LogOut,
+  Building,
+  Settings,
+  Calendar,
+} from "lucide-react";
 
 const Dashboard = () => {
   const { signOut, profile, user } = useAuth();
@@ -22,12 +35,12 @@ const Dashboard = () => {
 
       try {
         const { data, error } = await supabase
-          .from('establishments')
-          .select('*')
-          .eq('owner_id', user.id)
+          .from("establishments")
+          .select("*")
+          .eq("owner_id", user.id)
           .single();
 
-        if (error && error.code !== 'PGRST116') {
+        if (error && error.code !== "PGRST116") {
           throw error;
         }
 
@@ -35,9 +48,11 @@ const Dashboard = () => {
 
         // Fetch appointments if establishment exists
         if (data) {
-          const { data: appointmentsData, error: appointmentsError } = await supabase
-            .from('appointments')
-            .select(`
+          const { data: appointmentsData, error: appointmentsError } =
+            await supabase
+              .from("appointments")
+              .select(
+                `
               id,
               start_time,
               end_time,
@@ -46,20 +61,21 @@ const Dashboard = () => {
                 name,
                 price
               )
-            `)
-            .eq('establishment_id', data.id)
-            .gte('start_time', new Date().toISOString())
-            .order('start_time', { ascending: true })
-            .limit(5);
+            `
+              )
+              .eq("establishment_id", data.id)
+              .gte("start_time", new Date().toISOString())
+              .order("start_time", { ascending: true })
+              .limit(5);
 
           if (appointmentsError) {
-            console.error('Erro ao carregar agendamentos:', appointmentsError);
+            console.error("Erro ao carregar agendamentos:", appointmentsError);
           } else {
             setAppointments(appointmentsData || []);
           }
         }
       } catch (error) {
-        console.error('Erro ao carregar dados:', error);
+        console.error("Erro ao carregar dados:", error);
       } finally {
         setLoading(false);
       }
@@ -71,7 +87,7 @@ const Dashboard = () => {
   // Redirect to setup if no establishment
   useEffect(() => {
     if (!loading && !establishment) {
-      navigate('/setup-establishment');
+      navigate("/setup-establishment");
     }
   }, [loading, establishment, navigate]);
 
@@ -97,12 +113,10 @@ const Dashboard = () => {
         <div className="flex justify-between items-center mb-6">
           <div>
             <h1 className="text-3xl font-bold">Dashboard</h1>
-            <p className="text-muted-foreground">Bem-vindo ao painel administrativo</p>
+            <p className="text-muted-foreground">
+              Bem-vindo ao painel administrativo
+            </p>
           </div>
-          <Button variant="outline" onClick={handleLogout} className="flex items-center space-x-2">
-            <LogOut className="h-4 w-4" />
-            <span>Sair</span>
-          </Button>
         </div>
 
         {/* User Info */}
@@ -115,9 +129,15 @@ const Dashboard = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              <p><strong>Nome:</strong> {profile?.full_name || 'Não informado'}</p>
-              <p><strong>Tipo:</strong> Administrador</p>
-              <p><strong>Status:</strong> Ativo</p>
+              <p>
+                <strong>Nome:</strong> {profile?.full_name || "Não informado"}
+              </p>
+              <p>
+                <strong>Tipo:</strong> Administrador
+              </p>
+              <p>
+                <strong>Status:</strong> Ativo
+              </p>
             </div>
           </CardContent>
         </Card>
@@ -126,7 +146,9 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Próximos Agendamentos</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                Próximos Agendamentos
+              </CardTitle>
               <Calendar className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -134,25 +156,32 @@ const Dashboard = () => {
               <p className="text-xs text-muted-foreground">Nos próximos dias</p>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Receita Estimada</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                Receita Estimada
+              </CardTitle>
               <Building className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {new Intl.NumberFormat('pt-BR', {
-                  style: 'currency',
-                  currency: 'BRL'
+                {new Intl.NumberFormat("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
                 }).format(
-                  appointments.reduce((total, apt) => total + (apt.services?.price || 0), 0)
+                  appointments.reduce(
+                    (total, apt) => total + (apt.services?.price || 0),
+                    0
+                  )
                 )}
               </div>
-              <p className="text-xs text-muted-foreground">Próximos agendamentos</p>
+              <p className="text-xs text-muted-foreground">
+                Próximos agendamentos
+              </p>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Status</CardTitle>
@@ -160,7 +189,9 @@ const Dashboard = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">Ativo</div>
-              <p className="text-xs text-muted-foreground">Sistema funcionando</p>
+              <p className="text-xs text-muted-foreground">
+                Sistema funcionando
+              </p>
             </CardContent>
           </Card>
         </div>
@@ -169,7 +200,7 @@ const Dashboard = () => {
           {/* Management Actions */}
           <div className="space-y-6">
             <h2 className="text-xl font-bold">Gerenciamento</h2>
-            
+
             <div className="grid gap-4">
               <Card>
                 <CardHeader>
@@ -182,10 +213,10 @@ const Dashboard = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Button 
-                    variant="default" 
+                  <Button
+                    variant="default"
                     className="w-full"
-                    onClick={() => navigate('/gerenciar-servicos')}
+                    onClick={() => navigate("/gerenciar-servicos")}
                   >
                     Gerenciar Serviços
                   </Button>
@@ -198,15 +229,13 @@ const Dashboard = () => {
                     <Calendar className="h-5 w-5" />
                     <span>Configurar Horários</span>
                   </CardTitle>
-                  <CardDescription>
-                    Defina sua disponibilidade
-                  </CardDescription>
+                  <CardDescription>Defina sua disponibilidade</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Button 
-                    variant="default" 
+                  <Button
+                    variant="default"
                     className="w-full"
-                    onClick={() => navigate('/disponibilidade')}
+                    onClick={() => navigate("/disponibilidade")}
                   >
                     Configurar Horários
                   </Button>
@@ -218,7 +247,7 @@ const Dashboard = () => {
           {/* Appointments Overview */}
           <div className="space-y-6">
             <h2 className="text-xl font-bold">Agendamentos</h2>
-            
+
             <Card>
               <CardHeader>
                 <CardTitle>Próximos Agendamentos</CardTitle>
@@ -236,18 +265,27 @@ const Dashboard = () => {
                 ) : (
                   <div className="space-y-4">
                     {appointments.map((appointment) => (
-                      <div key={appointment.id} className="flex items-center justify-between p-3 border rounded-lg">
+                      <div
+                        key={appointment.id}
+                        className="flex items-center justify-between p-3 border rounded-lg"
+                      >
                         <div>
-                          <p className="font-medium">{appointment.services?.name}</p>
+                          <p className="font-medium">
+                            {appointment.services?.name}
+                          </p>
                           <p className="text-sm text-muted-foreground">
-                            {format(new Date(appointment.start_time), 'dd/MM/yyyy HH:mm', { locale: ptBR })}
+                            {format(
+                              new Date(appointment.start_time),
+                              "dd/MM/yyyy HH:mm",
+                              { locale: ptBR }
+                            )}
                           </p>
                         </div>
                         <div className="text-right">
                           <p className="font-medium">
-                            {new Intl.NumberFormat('pt-BR', {
-                              style: 'currency',
-                              currency: 'BRL'
+                            {new Intl.NumberFormat("pt-BR", {
+                              style: "currency",
+                              currency: "BRL",
                             }).format(appointment.services?.price || 0)}
                           </p>
                           <Badge variant="default">{appointment.status}</Badge>
