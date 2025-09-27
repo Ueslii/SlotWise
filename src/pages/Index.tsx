@@ -29,7 +29,9 @@ const Index = () => {
             alt="Logo da SlotWise"
             className="h-10 w-10 mr-4"
           />
-          <span className="text-2xl font-bold hidden sm:inline">SlotWise</span>
+          <span className="text-2xl font-bold hidden sm:inline">
+            <span className="text-primary">Slot</span>Wise
+          </span>
         </div>
         <div className="flex items-center gap-2">
           <Button>
@@ -45,7 +47,9 @@ const Index = () => {
         <div className="text-center mb-12 pt-8">
           <div className="space-y-2">
             <h1 className="text-7xl font-bold">Transforme a Gestão do Seu</h1>
-            <h1 className="text-7xl font-bold">Negócio com o SlotWise</h1>
+            <h1 className="text-7xl font-bold">
+              Negócio com a <span className="text-primary">Slot</span>Wise
+            </h1>
             <p className="text-2 xl text-muted-foreground ">
               A plataforma definitiva de agendamentos inteligente para
               prestadores <br />
