@@ -8,49 +8,62 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
-import { Calendar, Users, LogIn, UserPlus } from "lucide-react";
+import {
+  Calendar,
+  Users,
+  FileChartColumn,
+  LogIn,
+  UserPlus,
+} from "lucide-react";
 
 const Index = () => {
   const { user } = useAuth();
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-backgroundblue ">
+      {/* Header*/}
+      <div className="bg-backgroundheader mx-auto p-2 flex items-center justify-between ">
+        <div className="flex items-center gap-3">
+          <img
+            src="/logo.png"
+            alt="Logo da SlotWise"
+            className="h-10 w-10 mr-4"
+          />
+          <span className="text-2xl font-bold hidden sm:inline">SlotWise</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button>
+            <Link to="/register">Cadastre-se agora</Link>
+          </Button>
+          <Button variant="outline" className="bg-backgroundheader">
+            <Link to="/login">Já tem uma conta? </Link>
+          </Button>
+        </div>
+      </div>
       <div className="container mx-auto p-4">
-        {/* Header */}
+        {/* Heading */}
         <div className="text-center mb-12 pt-8">
-          <h1 className="text-4xl font-bold mb-4">SlotWise</h1>
-          <p className="text-xl text-muted-foreground mb-8">
-            Plataforma inteligente de agendamentos
-          </p>
-          <div className="text-center mt-8">
-            <h2 className="text-xl font-bold mb-4">Teste de Acesso</h2>
-            <Link to="/estabelecimentos/1">
-              {" "}
-              {/* <-- SUBSTITUA O "1" PELO ID REAL */}
-              <Button variant="secondary">Ver Estabelecimento de Teste</Button>
-            </Link>
+          <div className="space-y-2">
+            <h1 className="text-7xl font-bold">Transforme a Gestão do Seu</h1>
+            <h1 className="text-7xl font-bold">Negócio com o SlotWise</h1>
+            <p className="text-2 xl text-muted-foreground ">
+              A plataforma definitiva de agendamentos inteligente para
+              prestadores <br />
+              de serviço. Menos no-shows, mais clientes satisfeitos. Tudo em um
+              só lugar.
+            </p>
           </div>
+
           {!user && (
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/login">
-                <Button className="flex items-center space-x-2 min-w-[140px]">
-                  <LogIn className="h-4 w-4" />
-                  <span>Entrar</span>
-                </Button>
-              </Link>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8 ">
               <Link to="/register">
-                <Button
-                  variant="outline"
-                  className="flex items-center space-x-2 min-w-[140px]"
-                >
-                  <UserPlus className="h-4 w-4" />
-                  <span>Cadastrar</span>
+                <Button className="flex items-center space-x-2 min-w-[140px]">
+                  <span>Começe Agora</span>
                 </Button>
               </Link>
             </div>
           )}
         </div>
-
         {/* Features */}
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
           <Card>
@@ -92,7 +105,7 @@ const Index = () => {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
-                <Calendar className="h-5 w-5 text-primary" />
+                <FileChartColumn className="h-5 w-5 text-primary" />
                 <span>Relatórios</span>
               </CardTitle>
               <CardDescription>Análises e métricas detalhadas</CardDescription>
@@ -104,6 +117,26 @@ const Index = () => {
             </CardContent>
           </Card>
         </div>
+        {/*footer*/}
+        <section className="py-20">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-3xl font-bold text-foreground mb-4">
+              Pronto para revolucionar seus agendamentos?
+            </h2>
+            <p className="text-muted-foreground text-lg mb-8">
+              Junte-se a centenas de prestadores que já usam o SlotWise para
+              gerenciar seus negócios
+            </p>
+            <div className="justify-center flex flex-col sm:flex-row gap-4 ">
+              <Link to="/register">
+                <Button className="flex items-center  space-x-2 min-w-[140px]">
+                  <span>Criar Conta Grátis</span>
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+        {/*footer*/}
       </div>
     </div>
   );
